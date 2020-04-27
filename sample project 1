@@ -1,0 +1,261 @@
+#include <conio.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+struct bank
+{
+	int accno;
+	char name[50];
+	char addr[100];
+	int bal;
+};
+struct bank b[100];
+int total=0;
+void box(int a,int b,int c,int d)
+{
+	int i,j;
+	for(i=a;i<c;i++)
+	{
+		gotoxy(i,b);	printf("\xcd");
+		gotoxy(i,d);	printf("\xcd");
+	}
+	for(j=b;j<d;j++)
+	{
+		gotoxy(a,j);	printf("\xba");
+		gotoxy(c,j);	printf("\xba");
+	}
+	gotoxy(a,b);	printf("\xc9");
+	gotoxy(c,b);	printf("\xbb");
+	gotoxy(a,d);	printf("\xc8");
+	gotoxy(c,d);	printf("\xbc");
+}
+
+void splash()
+{
+	textcolor(GREEN);
+	clrscr();
+	box(12,3,69,5);
+	gotoxy(31,4);
+	textcolor(CYAN + BLINK);
+	cprintf("BANK   OF   INDIA");
+	box(12,9,69,18);
+	gotoxy(35,10);
+	textcolor(CYAN + BLINK);
+	cprintf("* WELCOME *");
+	gotoxy(24,13);
+	textcolor(RED);
+	cprintf("PROGRAMMED BY  : ");
+	gotoxy(24,16);
+	cprintf("COPYRIGHTS     : ");
+	textcolor(YELLOW);
+	gotoxy(44,13);
+	cprintf("VIRENDRA");
+	gotoxy(44,16);
+	cprintf("VIRENDRA");
+	while(!kbhit()){}
+	getch();
+}
+void createacc()
+{
+	clrscr();
+	printf("\n\n");
+	textcolor(RED+BLINK);
+	cprintf("***************** CREATING NEW ACCOUNT ***************");
+	textcolor(YELLOW);
+	printf("\n\n\nEnter your details");
+	printf("\n\n\n\tAccount no: ");
+	scanf("%d",&b[total].accno);
+	printf("\n\n\tName: ");
+	scanf("%s",&b[total].name);
+	printf("\n\n\tAddress: ");
+	scanf("%s",&b[total].addr);
+	printf("\n\n\tBalance: ");
+	scanf("%d",&b[total].bal);
+	total++;
+}
+void deleteacc()
+{
+	int acc,i,j,flag=0;
+	clrscr();
+	printf("\n\n");
+	textcolor(RED+BLINK);
+	cprintf("***************** VIEWING ACCOUNT ***************");
+	textcolor(YELLOW);
+	printf("\n\n\nEnter the account no. : ");
+	scanf("%d",&acc);
+	for(i=0;i<total;i++)
+	{
+		if(b[i].accno==acc)
+		{
+			flag=1;
+			break;
+		}
+	}
+	if(flag==1)
+	{
+		for(j=i;j<total;j++)
+		{
+			b[j].accno=b[j+1].accno;
+			b[j].bal=b[j+1].bal;
+			strcpy(b[j].name,b[j+1].name);
+			strcpy(b[j].addr,b[j+1].addr);
+		}
+		total--;
+		printf("\n\n\nAccount deleted successfully.....");
+	}
+	else
+		printf("\n\n\nAccount not found......");
+	getch();
+}
+void viewacc()
+{
+	int acc,i,flag=0;
+	clrscr();
+	printf("\n\n");
+	textcolor(RED+BLINK);
+	cprintf("***************** VIEWING ACCOUNT ***************");
+	textcolor(YELLOW);
+	printf("\n\n\nEnter the account no. : ");
+	scanf("%d",&acc);
+	for(i=0;i<total;i++)
+	{
+		if(b[i].accno==acc)
+		{
+			flag=1;
+			break;
+		}
+	}
+	if(flag==1)
+	{
+		printf("\n\n\nAccount no: %d",b[i].accno);
+		printf("\n\nName: %s",b[i].name);
+		printf("\n\nAddress: %s",b[i].addr);
+		printf("\n\nBalance: %d",b[i].bal);
+	}
+	else
+		printf("\n\n\nAccount not found......");
+	getch();
+}
+void withdraw()
+{
+	int acc,i,flag=0,amt;
+	clrscr();
+	printf("\n\n");
+	textcolor(RED+BLINK);
+	cprintf("***************** WITHDRAW MONEY ***************");
+	textcolor(YELLOW);
+	printf("\n\n\nEnter the account no. : ");
+	scanf("%d",&acc);
+	for(i=0;i<total;i++)
+	{
+		if(b[i].accno==acc)
+		{
+			flag=1;
+			break;
+		}
+	}
+	if(flag==1)
+	{
+		printf("\n\nEnter the amount of money to withdraw: ");
+		scanf("%d,",&amt);
+		if(amt>b[i].bal)
+			printf("\n\nNot enough money........");
+		else
+		{
+			b[i].bal-=amt;
+			printf("\n\nAmount deducted successfully.....");
+			printf("\n\n\nAccount no: %d",b[i].accno);
+			printf("\n\nName: %s",b[i].name);
+			printf("\n\nAddress: %s",b[i].addr);
+			printf("\n\nBalance: %d",b[i].bal);
+		}
+	}
+	else
+		printf("\n\n\nAccount not found......");
+	getch();
+}
+void deposit()
+{
+	int acc,i,flag=0,amt;
+	clrscr();
+	printf("\n\n");
+	textcolor(RED+BLINK);
+	cprintf("***************** DEPOSIT MONEY ***************");
+	textcolor(YELLOW);
+	printf("\n\n\nEnter the account no. : ");
+	scanf("%d",&acc);
+	for(i=0;i<total;i++)
+	{
+		if(b[i].accno==acc)
+		{
+			flag=1;
+			break;
+		}
+	}
+	if(flag==1)
+	{
+		printf("\n\nEnter the amount of money to deposit: ");
+		scanf("%d,",&amt);
+		b[i].bal+=amt;
+		printf("\n\nAmount deposited successfully.....");
+		printf("\n\n\nAccount no: %d",b[i].accno);
+		printf("\n\nName: %s",b[i].name);
+		printf("\n\nAddress: %s",b[i].addr);
+		printf("\n\nBalance: %d",b[i].bal);
+	}
+	else
+		printf("\n\n\nAccount not found......");
+	getch();
+}
+
+
+void menu()
+{
+	int ch;
+	while(1)
+	{
+		clrscr();
+		textcolor(RED);
+		cprintf("********************* M E N U ************************");
+		textcolor(YELLOW);
+		printf("\n\n\n\t1) Create new account\n\n\t");
+		printf("2) Delete account\n\n\t");
+		printf("3) View account\n\n\t");
+		printf("4) Withdraw money\n\n\t");
+		printf("5) Deposit money\n\n\t");
+		printf("6) Exit\n\n\t");
+		printf("Enter your choice : ");
+		scanf("%d",&ch);
+		if(ch==1)
+			createacc();
+		else if(ch==2)
+			deleteacc();
+		else if(ch==3)
+			viewacc();
+		else if(ch==4)
+			withdraw();
+		else if(ch==5)
+			deposit();
+		else if(ch==6)
+			exit(0);
+		else
+			cprintf("\n\nEnter valid choice.........\n");
+	}
+
+}
+void main()
+{
+	int i;
+	clrscr();
+	splash();
+	for(i=0;i<100;i++)
+	{
+		b[i].accno=0;
+		b[i].bal=0;
+		b[i].name[0]='\0';
+		b[i].addr[0]='\0';
+	}
+	total=0;
+	menu();
+} 
